@@ -1,0 +1,20 @@
+inicio 
+inteiro %i, %fat;
+escreva("Digite um valor");
+
+leia(%fat); 
+
+enquanto(%i != %fat){
+
+%fat = %fat*%i;
+%i = %i + 1;
+} 
+
+ se(%fat == 0){
+ escreva(0);
+ } 
+ senao {
+  escreva(%fat);
+ }
+
+fim

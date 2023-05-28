@@ -1,13 +1,8 @@
 package gerador;
 
-import analise.lexico.Tokens;
+import Lexico.Token;
 import java.util.ArrayList;
-import util.UtilStr;
 
-/**
- *
- * @author icaroalencar
- */
 public class Intermediario {
     
     static ArrayList<String> CodInt     = new ArrayList();
@@ -34,7 +29,7 @@ public class Intermediario {
     static boolean IsSe    =  false;
     static boolean IsnSe   =  false;
     
-    public static ArrayList<String> Iniciar(ArrayList<Tokens> tk, ArrayList<String> ListaVars) {
+    public static ArrayList<String> Iniciar(ArrayList<Token> tk, ArrayList<String> ListaVars) {
         CodIntLog.add("Inicio da geração do codigo intermediario");
         
         ls = ListaVars;
@@ -57,37 +52,37 @@ public class Intermediario {
     private static void RegistrarVars(ArrayList<String> list) {
         
         list.forEach((variavel) -> {
-            CodInt.add("_Var "+variavel.replace("&", ""));
+            CodInt.add("_Var "+variavel.replace("_", ""));
             CodIntLog.add("Declarando a Variavel.: "+variavel.replaceAll("&", ""));
         });
     }
 
-    private static void Conversao(ArrayList<Tokens> tokensList) {
+    private static void Conversao(ArrayList<Token> tokenList) {
         
-        tokensList.forEach((token) -> {
-            switch(token.getTokens()){
-                case "INICIO":
+        tokenList.forEach((token) -> {
+            switch(token.getToken()){
+                case "Inicio":
                     CodInt.add("inicio");
                     CodIntLog.add("Reconhecimento do Inicio do programa");
                     break;
                     
-                case "FIM":
+                case "fim":
                     CodInt.add("fim");
                     CodIntLog.add("Reconhecimento do fim do programa");
                     break;
                     
-                case "TIPO_ATRIB":
+                case "declaracao_vars":
                     // Registro de Variaveis
                     RegistrarVars(ls);
                     break;
                 
-                case "LEIA":
+                case "leia":
                     IsLe = true;
                     Comando = "leia ";
                     break;
                 
-                case "NOME_ATRIB":
-                    Variavel = token.getLexemas().replaceAll("&", "");
+                case "variavel":
+                    Variavel = token.getLexema().replaceAll("_", "");
                     if(IsAtrib == true){
                         InFix += Variavel;
                     }
@@ -103,14 +98,14 @@ public class Intermediario {
                     IsVar = true;
                     break;
                     
-                case "FRASE": 
+                case "frase": 
                     IsFrase = true;
-                    Frase = token.getLexemas();
+                    Frase = token.getLexema();
                     break;
                 
-                case "NUMERO":
+                case "inteiro":
                     IsNum = true;
-                    Numero = token.getLexemas();
+                    Numero = token.getLexema();
                     if(IsAtrib == true){    
                         InFix += Numero;
                     }
@@ -125,111 +120,90 @@ public class Intermediario {
                     }
                     break;
                     
-                case "ADICAO":
-                    InFix += token.getLexemas();
+                case "soma":
+                    InFix += token.getLexema();
                     break;
                 
-                case "SUBTRACAO":
-                    InFix += token.getLexemas();
+                case "subtracao":
+                    InFix += token.getLexema();
                     break; 
                     
-                case "MULTIPLICACAO":
-                    InFix += token.getLexemas();
+                case "multiplicacao":
+                    InFix += token.getLexema();
                     break; 
                 
-                case "DIVISAO":
-                    InFix += token.getLexemas();
-                    break;    
+                case "divisao":
+                    InFix += token.getLexema();
+                    break; 
+                case "igualdade":
+                    InFix += token.getLexema();
+                    break;     
                   
-                case "ESCREVA":
+                case "escrita":
                     IsEsc = true;
                     Comando = "escreva ";
                     break;
                     
-                case "ATRIBUICAO":
+                case "atribuicao":
                     VarAtrib = Variavel;
                     IsAtrib = true;
                     break;
                     
-                case "REPITA":
+                case "enquanto":
                     IsBis = true;
                     Comando = "repita_ate ";
                     break;
                     
-                case "CONDICAO":
+                case "se":
                     IsSe = true;
                     Comando = "se ";
                     break;
                 
-                case "NAOCONDICAO":
+                case "senao":
                     IsnSe = true;
                     Comando = "senao ";
                     break;            
                             
-                case "ABRE_PARENTESES":
+                case "abre_parenteses":
                     if(IsBis){
-                        ExpBis += token.getLexemas()+" ";
+                        ExpBis += token.getLexema()+" ";
                     }
                     if(IsSe){
-                        ExpSe += token.getLexemas()+" ";
+                        ExpSe += token.getLexema()+" ";
                     }
                     if(IsnSe){
-                        ExpnSe += token.getLexemas()+" ";
+                        ExpnSe += token.getLexema()+" ";
                     }
                     break;
                     
-                case "FECHA_PARENTESES":
+                case "fecha_parenteses":
                     if(IsBis){
-                        ExpBis += token.getLexemas()+" ";
+                        ExpBis += token.getLexema()+" ";
                     }
                     if(IsSe){
-                        ExpSe += token.getLexemas()+" ";
+                        ExpSe += token.getLexema()+" ";
                     }
                     if(IsnSe){
-                        ExpnSe += token.getLexemas()+" ";
+                        ExpnSe += token.getLexema()+" ";
                     }
                     break;
                     
-                case "DIFERENTE":
+                case "diferenca":
                     if(IsBis){
-                        ExpBis += token.getLexemas()+" ";
+                        ExpBis += token.getLexema()+" ";
                     }
                     if(IsSe){
-                        ExpSe += token.getLexemas()+" ";
+                        ExpSe += token.getLexema()+" ";
                     }
                     if(IsnSe){
-                        ExpnSe += token.getLexemas()+" ";
+                        ExpnSe += token.getLexema()+" ";
                     }
                     break;
                     
-                case "MAIOR":
-                    if(IsBis){
-                        ExpBis += token.getLexemas()+" ";
-                    }
-                    if(IsSe){
-                        ExpSe += token.getLexemas()+" ";
-                    }
-                    if(IsnSe){
-                        ExpnSe += token.getLexemas()+" ";
-                    }
-                    break;
-                    
-                case "MENOR":
-                    if(IsBis){
-                        ExpBis += token.getLexemas()+" ";
-                    }
-                    if(IsSe){
-                        ExpSe += token.getLexemas()+" ";
-                    }
-                    if(IsnSe){
-                        ExpnSe += token.getLexemas()+" ";
-                    }
-                    break;
-                    
-                case "ABRE_CHAVES":
+                case "abre_chave":
                     if(IsBis){
                         CodInt.add(Comando+ExpBis);
-                        CodIntLog.add("Reconhecimento do comando do inicio da repetição(BIS)" );
+                        CodIntLog.add("Reconhecimento do comando do inicio da repetição(enquanto)" );
                     }
                     if(IsSe){
                         CodInt.add(Comando+ExpSe);
@@ -237,29 +211,29 @@ public class Intermediario {
                     }
                     if(IsnSe){
                         CodInt.add(Comando+ExpnSe);
-                        CodIntLog.add("Reconhecimento do comando do incio da condicional (~SE)");
+                        CodIntLog.add("Reconhecimento do comando do incio da condicional (senao)");
                     }
                     break;
                     
-                case "FECHA_CHAVES":
+                case "fecha_chave":
                     if(IsBis){
                         CodInt.add("fim_repita");
-                        CodIntLog.add("Reconhecimento do comando do final da repetição(BIS)" );
+                        CodIntLog.add("Reconhecimento do comando do final da repetição(enquanto)" );
                         IsBis    = false;
                     }
                     if(IsSe){
                         CodInt.add("fim_se");
-                        CodIntLog.add("Reconhecimento do comando do final da condificiona(SE)" );
+                        CodIntLog.add("Reconhecimento do comando do final da condicional (SE)" );
                         IsSe    = false;
                     }
                     if(IsnSe){
                         CodInt.add("fim_senao");
-                        CodIntLog.add("Reconhecimento do comando do final da condificiona(~SE)" );
+                        CodIntLog.add("Reconhecimento do comando do final da condicional (senao)" );
                         IsnSe    = false;
                     }
                     break;
                         
-                case "FIM_LINHA":
+                case "fim_linha":
                     
                     // Converte o comando leia
                     if(IsLe == true && IsVar == true){

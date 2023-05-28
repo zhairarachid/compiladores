@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import Lexico.*;
 import Sintatico.*;
+import gerador.Intermediario;
 import Semantico.*;
 
 public class App{
@@ -17,5 +18,6 @@ public class App{
         */
         Sintatico.main(TokenLista);
         semanticolista = semantico.Iniciar(TokenLista);
+        Intermediario.Iniciar(TokenLista, semanticolista); 
     }
 }

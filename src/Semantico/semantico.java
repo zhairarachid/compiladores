@@ -33,6 +33,7 @@ public class semantico {
             if(isValidaDivPorZero == true){
                 if(elements.getLexema().equals("0")){
                     System.out.println("Erro.: Não é possivel efetuar divisao por zero");
+                     isValidaDivPorZero = false;
                 }
             }
         });

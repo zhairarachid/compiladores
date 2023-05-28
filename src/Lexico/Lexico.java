@@ -1,3 +1,5 @@
+package Lexico;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -181,7 +183,7 @@ public class Lexico {
                 }
             
             //case 'e'
-            case '%': 
+            case '_': 
                 if ((int)fita[token.getColuna()] >= 97 && (int)fita[token.getColuna()] <= 122 ){
                     FormaToken += c;
                     

@@ -1,5 +1,5 @@
 /* Autor.: Zhaira
- * 
+ * Errlista.add("Erro sintatico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
  */
 
 package Sintatico;
@@ -11,10 +11,11 @@ import Lexico.Token;
 
 public class Sintatico{
 
-    static Stack<String> pilha = new Stack();
+    static Stack<String> pilha          = new Stack();
     static ArrayList<Token> tk;
+    static ArrayList<String> Errlista   = new ArrayList();
     
-    public static void main(ArrayList<Token> token) {
+    public static Boolean main(ArrayList<Token> token) {
         tk = new ArrayList<>(token);
         pilha.push("$");
         pilha.push("estrutura_programa");
@@ -22,9 +23,15 @@ public class Sintatico{
         while(!"$".equals(pilha.peek())){
             Geraproducao(tk.get(0), pilha.peek());
             validador(tk.get(0), pilha.peek());
+            if(!Errlista.isEmpty()){
+                Errlista.forEach(t -> {
+                    System.out.println(t);
+                });
+                break;
+            }
+
         }
-
-
+/*
         pilha.forEach(t -> {
             System.out.println(t);
     
@@ -33,6 +40,15 @@ public class Sintatico{
         tk.forEach(t -> {
             System.out.println(t);
         });
+        Errlista.forEach(t -> {
+            System.out.println(t);
+        });
+        */
+        if(Errlista.isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
     }
     
    
@@ -104,9 +120,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: Esperava \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna()+ " era esperado inicio");
+                    break;
+                }
             case "declaracao_vars":
                 if (tokenatual.getToken().equals("declaracao_vars")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
             case "variavel":
@@ -114,9 +138,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
             case "separador_vars":
                 if (tokenatual.getToken().equals("separador_vars")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
             case "fim_linha":
@@ -124,10 +156,18 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
             case "escrita":
                 if (tokenatual.getToken().equals("escrita")) {
                     Match();
                     break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+
                 }
 
             case "leitura":
@@ -135,9 +175,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
             case "se":
                 if (tokenatual.getToken().equals("se")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
             case "senao":
@@ -145,9 +193,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
             case "enquanto":
                 if (tokenatual.getToken().equals("enquanto")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
             case "abre_parenteses":
@@ -155,9 +211,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
             case "natural":
                 if (tokenatual.getToken().equals("natural")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
             case "frase":
@@ -165,14 +229,26 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
             case "fecha_parenteses":
                 if (tokenatual.getToken().equals("fecha_parenteses")) {
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
             case "inteiro":
                 if (tokenatual.getToken().equals("inteiro")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
 
@@ -181,9 +257,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
                 case "soma":
                 if (tokenatual.getToken().equals("soma")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
                 case "subtracao":
@@ -191,9 +275,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
                 case "multiplicacao":
                 if (tokenatual.getToken().equals("multiplicacao")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
                 case "divisao":
@@ -201,14 +293,26 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
                 case "igualdade":
                 if (tokenatual.getToken().equals("igualdade")) {
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
                 case "diferenca":
                 if (tokenatual.getToken().equals("diferenca")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
 
@@ -217,9 +321,17 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
                 case "fecha_chave":
                 if (tokenatual.getToken().equals("fecha_chave")) {
                     Match();
+                    break;
+                }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
                 }
 
@@ -228,10 +340,18 @@ public class Sintatico{
                     Match();
                     break;
                 }
+                else{
+                    Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+                }
                 
                 case "fim":
                     if (tokenatual.getToken().equals("fim")) {
                         Match();
+                        break;
+                    }
+                    else{
+                        Errlista.add("Erro sintatico.: \""+tokenatual.getLexema()+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                         break;
                     }
         
@@ -249,17 +369,20 @@ public class Sintatico{
 
 
 
-    private static void estrutura_programa( String tk) {
-        switch (tk) {
+    private static void estrutura_programa( String tk1) {
+        switch (tk1) {
             case "Inicio":
                 producaozero();
+                break;
+            default: 
+                Errlista.add("Erro sintatico.: \""+tk1+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                 break;
         }   
     }
 
     
-    private static void declaracao_vars( String tk) {
-        switch (tk) {
+    private static void declaracao_vars( String tk2) {
+        switch (tk2) {
             case "leitura":
                 producaovazio();
                 break;
@@ -283,10 +406,13 @@ public class Sintatico{
             case "variavel":
                 producaovazio();
                 break;
+            default:
+                Errlista.add("Erro sintatico.: \""+tk2+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                break;
         }   
     }
-    private static void lista_vars( String tk) {
-        switch (tk) {
+    private static void lista_vars( String tk3) {
+        switch (tk3) {
             case "separador_vars":
                 producaotres();
                 break;
@@ -294,31 +420,38 @@ public class Sintatico{
                 producaovazio();
                 break;
 
+            default:
+                Errlista.add("Erro sintatico.: \""+tk3+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                break;
+
         }   
     }
 
-    private static void codigo( String tk) {
-        switch (tk) {
+    private static void codigo( String tk4) {
+        switch (tk4) {
             case "leitura":
                 producaocinco();
                 break;
             case "escrita":
-            producaocinco();
+                producaocinco();
                 break;
 
             case "se":
-            producaocinco();
+                producaocinco();
                 break;
             case "enquanto":
-            producaocinco();
+                producaocinco();
                 break;
             case "variavel":
-            producaocinco();
-                break;   
+                producaocinco();
+                break; 
+            default:
+                Errlista.add("Erro sintatico.: \""+tk4+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+  
         }  
     }
-    private static void comando( String tk) {
-        switch (tk) {
+    private static void comando( String tk5) {
+        switch (tk5) {
             case "leia":
                 producaooito();
                 break;
@@ -335,32 +468,38 @@ public class Sintatico{
             case "variavel":
                 producaovinteeum();
                 break;
+            default:
+                Errlista.add("Erro sintatico.: \""+tk5+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                break;
          }
                 
     }
-        private static void variavel_saida( String tk) {
-            switch (tk) {
+        private static void variavel_saida( String tk6) {
+            switch (tk6) {
                 
                 case "inteiro":
-                producaodoze();
+                    producaodoze();
                     break;
                 case "natural":
-                producaoonze();
+                    producaoonze();
                     break;
                     
                 case "variavel":
-                producaodez();
+                    producaodez();
                     break;
                 
                 case "frase":
-                producaotreze();
+                    producaotreze();
                     break;
-                    
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk6+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
+
             }
         }
 
-        private static void lista_comando( String tk) {
-            switch (tk) {
+        private static void lista_comando( String tk7) {
+            switch (tk7) {
                 
                 case "fim":
                     producaovazio();
@@ -388,21 +527,25 @@ public class Sintatico{
                 case "variavel":
                     producaoseis();
                     break;
-                    
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk7+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
             }
         }
 
-        private static void condicao( String tk) {
-            switch (tk) {
+        private static void condicao( String tk8) {
+            switch (tk8) {
                 case "abre_parenteses":
                     producaoquinze();
                     break;
-
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk8+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
             }   
         }
 
-        private static void contra_condicao( String tk) {
-            switch (tk) {
+        private static void contra_condicao( String tk9) {
+            switch (tk9) {
                 case "fim":
                     producaovazio();;
                     break;
@@ -434,11 +577,15 @@ public class Sintatico{
                 case "senao":
                     producaodezeseis();;;
                     break;
+
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk9+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
             }   
         }
 
-        private static void expressao_matematica( String tk) {
-            switch (tk) {
+        private static void expressao_matematica( String tk10) {
+            switch (tk10) {
                 case "abre_parenteses":
                     producaovinteetres();
                     break;
@@ -451,24 +598,33 @@ public class Sintatico{
                 case "variavel":
                     producaovinteedois();
                     break;
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk10+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
             }   
         }
-        private static void operando( String tk) {
-            switch (tk) {
+        private static void operando( String tk11) {
+            switch (tk11) {
                 
                 case "inteiro":
                     producaovinteeoito();
                     break;
+                    
                 case "natural":
                     producaovinteesete();
                     break;
+
                 case "variavel":
                     producaovinteeseis();
                     break;
+
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk11+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
             }   
         }
-        private static void operacao_matematica( String tk) {
-            switch (tk) {
+        private static void operacao_matematica( String tk12) {
+            switch (tk12) {
                 
                 case "soma":
                     producaovinteequatro();
@@ -500,11 +656,14 @@ public class Sintatico{
                     case "fim_linha":
                     producaovazio();
                     break; 
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk12+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
             }
         }
 
-        private static void operador_logico( String tk) {
-            switch (tk) {
+        private static void operador_logico( String tk13) {
+            switch (tk13) {
                 
                 case "igualdade":
                     producaodezoito();
@@ -512,11 +671,14 @@ public class Sintatico{
                 case "diferenca":
                     producaodezenove();
                     break;
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk13+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
+                    break;
             }   
         }
 
-        private static void operador( String tk) {
-            switch (tk) {
+        private static void operador( String tk14) {
+            switch (tk14) {
                 
                 case "soma":
                     producaovinteenove();
@@ -532,6 +694,10 @@ public class Sintatico{
 
                 case "divisao":
                     producaotrintaedois();;
+                    break;
+
+                default:
+                    Errlista.add("Erro sintatico.: \""+tk14+"\" linha.: "+tk.get(0).getLinha()+" coluna.: "+tk.get(0).getColuna());
                     break;
             }   
         }

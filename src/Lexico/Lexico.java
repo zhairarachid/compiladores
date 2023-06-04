@@ -10,31 +10,26 @@ import java.util.ArrayList;
 public class Lexico {
 
     static BufferedReader linha = null;
-    static String caminho ="/Users/Zhaira/OneDrive/Área de Trabalho/compiladores/gramatica.txt";
-    static char fita[] = null;
-    static String flag = null;
-    static Token token = new Token();
-    static String FormaToken = "";
+    //static String caminho               ="/Users/Zhaira/OneDrive/Área de Trabalho/compiladores/gramatica.txt";
+    static char fita[]                  = null;
+    static String flag                  = null;
+    static Token token                  = new Token();
+    static String FormaToken            = "";
     static ArrayList<String> ListaToken = new ArrayList();
+    static ArrayList<String> Errlista   = new ArrayList();
+    static ArrayList<Token> tokens      = new ArrayList<>(); // guardar informações do tok
 
-    static ArrayList<Token> tokens = new ArrayList<>(); // guardar informações do tok
-
-    public static ArrayList<Token> main() throws Exception {
+    public static ArrayList<Token> main(String caminho) throws Exception {
         LerArquivo(caminho);
         LerLinha();
         lertoken();
 
-        /*if(!ListaToken.isEmpty()){
-            if(ListaToken.size() > 0)
-                System.out.println("Foram Encontrados "+ListaToken.size() + " Tokens");
-            else
-                System.out.println("Foi Encontrado apenas "+ListaToken.size() + " Token");
-            
-            MostrarTokensEncontrados();
+        if(!Errlista.isEmpty()){
+            tokens.clear();
+            Errlista.forEach(t -> {
+                System.out.println(t);
+            });
         }
-
-        System.out.println("Total Tokens lista: "+tokens.size());
-        */
         return tokens;
     }
 
@@ -185,10 +180,11 @@ public class Lexico {
             case '_': 
                 if ((int)fita[token.getColuna()] >= 97 && (int)fita[token.getColuna()] <= 122 ){
                     FormaToken += c;
-                    
                     return 11;
                 }else{
-
+                    
+                     Errlista.add("Erro lexico.: \""+token.getLexema()+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                    
                     //colocar erro numerico nao pode colocar no numero
                     return 0;
 
@@ -294,10 +290,12 @@ public class Lexico {
                 return 29;
 
             default:
-            if((int)fita[token.getColuna()-1] >= 48 && (int)fita[token.getColuna()-1] <= 57){
-                FormaToken += c;
-                return 34;
-            }
+                if((int)fita[token.getColuna()-1] >= 48 && (int)fita[token.getColuna()-1] <= 57){
+                    FormaToken += c;
+                    return 34;
+                }else {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                 return 0;
         }
            
@@ -311,6 +309,9 @@ public class Lexico {
                 return 2;
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
     }
@@ -326,6 +327,9 @@ public class Lexico {
                 return 6;
 
             default:
+            {
+                Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+            }
                 return 0;
         }
     }
@@ -338,6 +342,9 @@ public class Lexico {
                 }
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
     }
@@ -350,6 +357,9 @@ public class Lexico {
                 }
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
     }
@@ -364,6 +374,9 @@ public class Lexico {
                 }
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
     }
@@ -376,6 +389,9 @@ public class Lexico {
                 return 7;
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
  
@@ -390,6 +406,9 @@ public class Lexico {
                 return 8;
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
     }
@@ -401,6 +420,9 @@ public class Lexico {
                 return 9;
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
     }
@@ -416,6 +438,9 @@ public class Lexico {
                 }
 
                 default:
+                {
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
                     return 0;
         }
     }
@@ -427,7 +452,9 @@ public class Lexico {
             adicionaToken( FormaToken, "igualdade", token.getLinha(), token.getColuna());
             FormaToken = "";
             return 0;
-            
+         default : {
+            Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+        }
         }
 
         return 0;
@@ -436,10 +463,9 @@ public class Lexico {
     public static int s11(char c) {
         switch(c){
             case ' ':
-            adicionaToken( FormaToken, "variavel", token.getLinha(), token.getColuna());
-            FormaToken = "";
-            return 0;
-
+                adicionaToken( FormaToken, "variavel", token.getLinha(), token.getColuna());
+                FormaToken = "";
+                return 0;
                 
             case ',':
                 //Token Variavel
@@ -463,19 +489,25 @@ public class Lexico {
                 return 0;
 
             case ')':;
-            adicionaToken( FormaToken, "variavel", token.getLinha(), token.getColuna());
-            FormaToken = "";
+                adicionaToken( FormaToken, "variavel", token.getLinha(), token.getColuna());
+                FormaToken = "";
 
-            FormaToken += c;
-            adicionaToken( FormaToken, "fecha_parenteses", token.getLinha(), token.getColuna());
-            FormaToken = "";
-            return 0;
+                FormaToken += c;
+                adicionaToken( FormaToken, "fecha_parenteses", token.getLinha(), token.getColuna());
+                FormaToken = "";
+                return 0;
             
             default:
-            FormaToken += c;
-                return 11;
-                
+                if (((int)c >= 97 && (int)c <= 122)  
+                ||
+                ((int)c >= 48 && (int)c <= 57)){
+                    FormaToken += c;
+                    return 11;
+                } else{
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                }
         }
+        return 0;
     }
     public static int s12(char c) {
         switch(c){
@@ -490,6 +522,9 @@ public class Lexico {
  
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                     return 0;
         }
     }
@@ -501,6 +536,9 @@ public class Lexico {
                 return 14;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                     return 0;
         }
     }
@@ -512,6 +550,9 @@ public class Lexico {
             
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                     return 0;
         }
     }
@@ -522,6 +563,9 @@ public class Lexico {
                 return 16;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                     return 0;
         }
     }
@@ -532,6 +576,9 @@ public class Lexico {
                 return 17;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                     return 0;
         }
     }
@@ -544,6 +591,9 @@ public class Lexico {
                 return 0;
 
             default: 
+            
+                Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+            
                 return 0;
        
            }   
@@ -560,7 +610,7 @@ public class Lexico {
         default: 
             FormaToken += c;
             return 18;
-
+// forma frase , dentro de aspas pode qualquer coisa nao precisa de erro testar no gals
 
        }  
      }
@@ -572,6 +622,9 @@ public class Lexico {
                 return 20;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -582,6 +635,9 @@ public class Lexico {
                 return 21;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -594,6 +650,8 @@ public class Lexico {
             return 0;
 
         default: 
+        
+            Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
             return 0;
         }
     }
@@ -604,6 +662,9 @@ public class Lexico {
                 return 23;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -614,6 +675,9 @@ public class Lexico {
                 return 24;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -624,6 +688,9 @@ public class Lexico {
                 return 25;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -634,6 +701,9 @@ public class Lexico {
                 return 26;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -644,6 +714,9 @@ public class Lexico {
                 return 27;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -656,6 +729,9 @@ public class Lexico {
             return 0;
 
         default: 
+        
+            Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+        
             return 0;
         }
     } 
@@ -668,6 +744,9 @@ public class Lexico {
             return 0;
 
         default: 
+        
+            Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+        
             return 0;
         }
     } 
@@ -684,6 +763,9 @@ public class Lexico {
                     return 0;
                 }
             default:
+            
+                Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+            
                  return 0;
         }
     }
@@ -695,6 +777,9 @@ public class Lexico {
                 return 31;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -705,6 +790,9 @@ public class Lexico {
                 return 35;
 
             default:
+            
+                Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+            
                  return 0;
         }
     }
@@ -715,6 +803,9 @@ public class Lexico {
                 return 33;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -727,6 +818,9 @@ public class Lexico {
             return 0;
 
                 default:
+                
+                    Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
+                
                  return 0;
         }
     }
@@ -773,6 +867,7 @@ public class Lexico {
                 return 0;
         
             default:
+                Errlista.add("Erro lexico.: \""+c+"\" linha.: "+token.getLinha()+" coluna.: "+token.getColuna());
                 return 0;
         }
     }

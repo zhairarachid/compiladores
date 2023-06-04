@@ -11,6 +11,7 @@ public class semantico {
     static ArrayList<String> declaração_vars    = new ArrayList();
     static boolean isDeclarando                 = false;
     static boolean isValidaDivPorZero           = false;
+    static boolean erro                         = false;
     
     public static ArrayList<String> Iniciar(ArrayList<Token> tk) {
         tk.forEach((elements) -> {
@@ -34,14 +35,20 @@ public class semantico {
                 if(elements.getLexema().equals("0")){
                     System.out.println("Erro.: Não é possivel efetuar divisao por zero");
                      isValidaDivPorZero = false;
+                     erro = true;
                 }
             }
         });
         
         
         System.out.println("Lista de Variaveis declaradas.: "+declaração_vars.toString());
-        
-        return declaração_vars;
+
+        if(!erro){
+            return declaração_vars;
+        }else{
+            declaração_vars.clear();
+            return declaração_vars;
+        }
     }
 
     private static void VerificaVarsDeclaradas(Token element) {
@@ -51,11 +58,13 @@ public class semantico {
             System.out.println("Variavel Declarada mais de uma vez.: "
                     +element.getLexema()+ " Linha.: "+element.getLinha()+
                     " Coluna.: "+element.getColuna());
+                    erro = true;
         }
         // verificando se a variavel chamada foi declarada.
         else if(isDeclarando == false && !declaração_vars.contains(element.getLexema())){
             System.out.println("Variavel não declarada.: "+element.getLexema()
             +" Linha.: "+element.getLinha() + " Coluna.: "+element.getColuna());
+            erro = true;
         }else{
             // Apenas para nao duplicar a variavel na lista
             if(!declaração_vars.contains(element.getLexema())){
